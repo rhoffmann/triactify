@@ -1,0 +1,34 @@
+
+
+:focus {
+  outline: none;
+}
+
+a {
+    font-weight: normal;
+}
+
+
+.color-primary {
+    color: $primary-color;
+}
+
+.color-light {
+    color: $white;
+}
+
+b, strong, .strong {
+    font-weight: $font-weight-medium;
+}
+
+.small {
+    font-size: rem-calc(12);
+}
+
+.medium {
+    font-size: rem-calc(16);
+}
+
+.large {
+    font-size: rem-calc(20);
+}

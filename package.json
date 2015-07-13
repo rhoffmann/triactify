@@ -1,0 +1,70 @@
+{
+  "name": "triactify",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "server": "node --harmony --harmony-generators ./server/server.js",
+    "pm2": "pm2 start server/server.js --node-args='--harmony --harmony-generators'",
+    "start": "node_modules/.bin/gulp",
+    "test": "node_modules/.bin/gulp test",
+    "karma": "node_modules/.bin/karma start"
+  },
+  "author": "Richard Hoffmann <rhoffmann@fastmail.com>",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "license": "MIT",
+  "repository": "",
+  "devDependencies": {
+    "babel": "^5.5.5",
+    "babel-eslint": "^3.1.14",
+    "babel-runtime": "^5.5.5",
+    "babelify": "^6.1.2",
+    "browserify": "^10.2.4",
+    "browserify-shim": "^3.8.8",
+    "concat-map": "0.0.1",
+    "concurrent-transform": "^1.0.0",
+    "del": "^1.2.0",
+    "event-stream": "^3.3.1",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-cached": "^1.1.0",
+    "gulp-changed": "^1.2.1",
+    "gulp-clone": "^1.0.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-connect": "^2.2.0",
+    "gulp-debug": "^2.0.1",
+    "gulp-eslint": "^0.13.2",
+    "gulp-filter": "^2.0.2",
+    "gulp-if": "^1.2.5",
+    "gulp-insert": "^0.4.0",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-minify-css": "^1.1.6",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-remember": "^0.3.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-rev": "^4.0.0",
+    "gulp-sass": "^2.0.1",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.6",
+    "gulp-webserver": "^0.9.1",
+    "merge-stream": "^0.1.7",
+    "run-sequence": "^1.1.0",
+    "sinon": "^1.14.1",
+    "through2": "^0.6.5",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.2",
+    "yargs": "^3.14.0"
+  },
+  "dependencies": {
+    "react": "^0.13.3"
+  },
+  "engines": {
+    "iojs": "2.3.*"
+  }
+}

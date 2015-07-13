@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+.section {
+    z-index: initial;
+}
+
+.section--color__primary {
+  background-color: $primary-color;
+}
+
+.section--color__secondary {
+  background-color: $secondary-color;
+}
+
+.section--color__grey {
+  background-color: $light-grey;
+}
+
+.section--color__dark {
+  background-color: $black;
+}
+
