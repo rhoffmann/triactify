@@ -1,38 +1,17 @@
 import React from 'react';
 import Trianglify from 'trianglify';
+import Immutable from 'immutable';
 
-// import Immutable from 'immutable';
 import chroma from 'chroma-js';
 
 function scale(valueIn, baseMin, baseMax, limitMin, limitMax) {
   return ((limitMax - limitMin) * (valueIn - baseMin) / (baseMax - baseMin)) + limitMin;
 }
 
-function updateColor(color, darkness, saturation) {
-  return chroma(color).darken(darkness).saturate(saturation);
+function updateColor(color, brightness, saturation) {
+  // return color;
+  return chroma(color).brighten(brightness).saturate(saturation);
 }
-
-/*
- * TODO: Parameter
- *   destruction (triangles)
- *   brightness
- *   size
- *   color
- *   liveliness
-
- *   basis: dunkelblau - hellblau +8 -8
- */
-
-// TODO: get vertexes, not paths, so we can animate adjacent triangles
-//  that use the same point as its neighbors. is that possible?
-
-// TODO: extract rendering and update in mixin? animatedComponent?
-
-// TODO: different animation algorithm: rotate vertex in circle/ellipsis around
-// its origin, different offsets, randomized
-
-// TODO: transform one color scheme to the next, interpolate values
-// with chroma from source to target
 
 function getPaths(pattern) {
 
@@ -66,57 +45,72 @@ export default React.createClass({
 
   propTypes: {
     fps : React.PropTypes.number,
+    destruction : React.PropTypes.number,
+    saturation : React.PropTypes.number,
+    liveliness: React.PropTypes.number,
+    brightness : React.PropTypes.number,
+    animateX: React.PropTypes.boolean,
+    animateY: React.PropTypes.boolean,
+    delta : React.PropTypes.number,
     config: React.PropTypes.object
   },
 
-  // cell_size: 75,
-  // variance: 0.75,
-  // x_colors: 'random',
-  // y_colors: 'match_x',
-  // palette: Trianglify.colorbrewer,
-  // color_space: 'lab',
-  // color_function: false,
-  // stroke_width: 1.51,
-  // width: 600,
-  // height: 400,
-  // seed: null,
-
   getDefaultProps() {
     return {
-      fps: 1,
+      fps: 10,
       delta: 0.1,
+      brightness: 1,
+      saturation: 1,
+      destruction: 0,
+      liveliness: 1,
       config: {
       }
     }
   },
 
-  getInitialState() {
+  init() {
 
-    console.dir(this.props.config);
-
-    // antipattern? props in state
     let pattern = Trianglify(this.props.config);
+
+    this.setState({
+      paths: getPaths(pattern)
+    });
+  },
+
+  getInitialState() {
 
     return {
       theta : 0,
-      darkness : 1,
-      paths : getPaths(pattern)
+      paths : []
     }
   },
 
+  componentWillReceiveProps(nextProps) {
+    // transition this into this state
+    console.log('willReceiveProps', nextProps);
+  },
+
+  componenWillUnmount() {
+
+  },
+
   componentWillMount() {
+    this.init();
+  },
+
+  componentDidMount() {
 
     var _this = this;
+    var _update = this.update;
 
     function draw() {
       setTimeout( () => {
         requestAnimationFrame(draw);
-        _this.update();
+        _update();
       }, 1000 / _this.props.fps);
     }
 
     draw();
-
   },
 
   update() {
@@ -124,30 +118,61 @@ export default React.createClass({
     // TODO: use Immutable
     var newPaths = Array.prototype.slice.call(this.state.paths, 0);
 
+    var _this = this;
+
     var theta = this.state.theta;
+
+    var animateY = this.props.animateY;
+    var animateX = this.props.animateX;
+
+    function scaleDestFactor(scaleFactor, destFactor) {
+      // _this.props.destruction)
+      return scaleFactor + (scaleFactor * _this.props.liveliness) + (destFactor * _this.props.destruction);
+    }
 
     for(var i = 0; i < newPaths.length; i++) {
   		var path = this.state.paths[i];
-      newPaths[i].y1 = path.y1 + Math.sin(theta + scale(path.x1, 0, 500, 0, 2 * Math.PI)) * 0.5;
-      newPaths[i].y2 = path.y2 + Math.sin(theta + scale(path.x2, 0, 500, 0, 2 * Math.PI)) * 0.5;
-  		newPaths[i].y3 = path.y3 + Math.sin(theta + scale(path.x3, 0, 500, 0, 2 * Math.PI)) * 0.5;
-      // newPaths[i].x1 = path.x1 + Math.cos(theta + scale(path.y1, 0, 500, 0, 2 * Math.PI)) * 0.5;
-      // newPaths[i].x2 = path.x2 + Math.cos(theta + scale(path.y2, 0, 500, 0, 2 * Math.PI)) * 0.5;
-  		// newPaths[i].x3 = path.x3 + Math.cos(theta + scale(path.y3, 0, 500, 0, 2 * Math.PI)) * 0.5;
+
+      if (animateY) {
+        newPaths[i].y1 = path.y1 + Math.sin(theta + scale(path.x1, 0, scaleDestFactor(500, 0), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 0);
+        newPaths[i].y2 = path.y2 + Math.sin(theta + scale(path.x2, 0, scaleDestFactor(500, 1), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 1);
+    		newPaths[i].y3 = path.y3 + Math.sin(theta + scale(path.x3, 0, scaleDestFactor(500, 2), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 2);
+      }
+
+      if (animateX) {
+        newPaths[i].x1 = path.x1 + Math.cos(theta + scale(path.x1, 0, scaleDestFactor(500, 0), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 0);
+        newPaths[i].x2 = path.x2 + Math.cos(theta + scale(path.x2, 0, scaleDestFactor(500, 1), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 1);
+    		newPaths[i].x3 = path.x3 + Math.cos(theta + scale(path.x3, 0, scaleDestFactor(500, 2), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 2);
+      }
   	}
+
+    // TODO: bring brightness, saturation, etc into state to modify it
 
     this.setState({
       theta: theta + this.props.delta,
-      darkness: (Math.sin(theta) + 1) * 0.5,
-      saturation: (Math.cos(theta) + 1) * 0.5,
       paths: newPaths
     });
 
   },
 
-  getColor: function(path) {
-    return path.color;
-    // return updateColor(path.color, this.state.darkness * 20, 1)
+  getBrightness(theta) {
+    // darkness: (Math.sin(theta) + 1) * 0.5,
+    // return this.state.brightness
+    return this.props.brightness;
+
+  },
+
+  getSaturation(theta) {
+    // (Math.cos(theta) + 1) * 0.5,
+    return this.props.saturation;
+  },
+
+  getShapeColor(color) {
+    return updateColor(color, this.getBrightness(), this.getSaturation());
+  },
+
+  getStrokeColor(color) {
+    return updateColor(color, this.getBrightness(), this.getSaturation());
   },
 
   drawTriangleSvg(path) {
@@ -156,9 +181,9 @@ export default React.createClass({
 
   render() {
 
-    var pathNodes = this.state.paths.map( (path) => {
+    var pathNodes = this.state.paths.map( (path, index) => {
       return (
-        <path d={this.drawTriangleSvg(path)} fill={this.getColor(path)} stroke={path.color}></path>
+        <path d={this.drawTriangleSvg(path)} key={index} fill={this.getShapeColor(path.color)} stroke={this.getStrokeColor(path.color)}></path>
       );
     });
 

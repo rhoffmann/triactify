@@ -2,16 +2,36 @@ import React from 'react';
 
 export default React.createClass({
   propTypes: {
-    onUpdate: React.PropTypes.func
+    onUpdate: React.PropTypes.func.isRequired,
+    value: React.PropTypes.string,
+    min: React.PropTypes.string,
+    max: React.PropTypes.string,
+    step: React.PropTypes.string,
+    param: React.PropTypes.string,
+    title: React.PropTypes.string
   },
-  updateValue() {
-    this.props.onUpdate(this.getDOMNode().value);
+  getInitialState() {
+    return {
+      value: 0
+    };
+  },
+  componentWillMount() {
+    this.setState({value: this.props.value});
+  },
+  handleChange() {
+    var val = this.refs.input.getDOMNode().value;
+
+    this.props.onUpdate(val, this.props.param || null);
+
+    this.setState({
+      value: val
+    });
   },
   render() {
     return (
       <div className="range-slider">
-        <span>{this.props.title}</span>
-        <input type="range" ref="{this.props.name}" onChange={this.handleChange} />
+        {this.props.title && <span>{this.props.title}</span>}
+        <input type="range" min={this.props.min} max={this.props.max} ref="input" value={this.state.value} step={this.props.step} onChange={this.handleChange} /><span className="value">{this.state.value}</span>
       </div>
     );
   }
