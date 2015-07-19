@@ -1,13 +1,27 @@
 import React from 'react';
 import Trianglify from 'trianglify';
-import Immutable from 'immutable';
 
-// import chroma from 'chroma';
-// console.dir(chroma);
+// import Immutable from 'immutable';
+import chroma from 'chroma-js';
 
 function scale(valueIn, baseMin, baseMax, limitMin, limitMax) {
   return ((limitMax - limitMin) * (valueIn - baseMin) / (baseMax - baseMin)) + limitMin;
 }
+
+function updateColor(color, darkness, saturation) {
+  return chroma(color).darken(darkness).saturate(saturation);
+}
+
+/*
+ * TODO: Parameter
+ *   destruction (triangles)
+ *   brightness
+ *   size
+ *   color
+ *   liveliness
+
+ *   basis: dunkelblau - hellblau +8 -8
+ */
 
 // TODO: get vertexes, not paths, so we can animate adjacent triangles
 //  that use the same point as its neighbors. is that possible?
@@ -21,15 +35,16 @@ function scale(valueIn, baseMin, baseMax, limitMin, limitMax) {
 // with chroma from source to target
 
 function getPaths(pattern) {
-  console.dir(pattern);
 
   var paths = [];
   pattern.polys.forEach(function(poly) {
     var d = poly[1]; // point = d[1]
     var color = poly[0] // color = d[0];
 
+    // center x, y of triangle
     var x = (d[0][0] + d[1][0] + d[2][0])/3;
     var y = (d[0][1] + d[1][1] + d[2][1])/3;
+
     var c = color;
 
     paths.push({
@@ -45,9 +60,7 @@ function getPaths(pattern) {
   return paths;
 }
 
-function getColorUpdate(color, lightness, saturation) {
-    // return Chroma.
-}
+
 
 export default React.createClass({
 
@@ -56,24 +69,37 @@ export default React.createClass({
     config: React.PropTypes.object
   },
 
+  // cell_size: 75,
+  // variance: 0.75,
+  // x_colors: 'random',
+  // y_colors: 'match_x',
+  // palette: Trianglify.colorbrewer,
+  // color_space: 'lab',
+  // color_function: false,
+  // stroke_width: 1.51,
+  // width: 600,
+  // height: 400,
+  // seed: null,
+
   getDefaultProps() {
     return {
-      fps: 30,
+      fps: 1,
+      delta: 0.1,
       config: {
-        width: 100,
-        height: 100,
-        cell_size: 10
       }
     }
   },
 
   getInitialState() {
 
+    console.dir(this.props.config);
+
     // antipattern? props in state
     let pattern = Trianglify(this.props.config);
 
     return {
       theta : 0,
+      darkness : 1,
       paths : getPaths(pattern)
     }
   },
@@ -101,30 +127,41 @@ export default React.createClass({
     var theta = this.state.theta;
 
     for(var i = 0; i < newPaths.length; i++) {
-  		var path = newPaths[i];
-  		newPaths[i].y1 = path.y1 + Math.sin(theta + scale(path.x1, 0, 500, 0, 2 * Math.PI)) * 0.5;
-  		newPaths[i].y2 = path.y2 + Math.sin(theta + scale(path.x2, 0, 500, 0, 2 * Math.PI)) * 0.5;
+  		var path = this.state.paths[i];
+      newPaths[i].y1 = path.y1 + Math.sin(theta + scale(path.x1, 0, 500, 0, 2 * Math.PI)) * 0.5;
+      newPaths[i].y2 = path.y2 + Math.sin(theta + scale(path.x2, 0, 500, 0, 2 * Math.PI)) * 0.5;
   		newPaths[i].y3 = path.y3 + Math.sin(theta + scale(path.x3, 0, 500, 0, 2 * Math.PI)) * 0.5;
+      // newPaths[i].x1 = path.x1 + Math.cos(theta + scale(path.y1, 0, 500, 0, 2 * Math.PI)) * 0.5;
+      // newPaths[i].x2 = path.x2 + Math.cos(theta + scale(path.y2, 0, 500, 0, 2 * Math.PI)) * 0.5;
+  		// newPaths[i].x3 = path.x3 + Math.cos(theta + scale(path.y3, 0, 500, 0, 2 * Math.PI)) * 0.5;
   	}
 
     this.setState({
-      theta: theta + 0.01,
+      theta: theta + this.props.delta,
+      darkness: (Math.sin(theta) + 1) * 0.5,
+      saturation: (Math.cos(theta) + 1) * 0.5,
       paths: newPaths
     });
 
   },
 
+  getColor: function(path) {
+    return path.color;
+    // return updateColor(path.color, this.state.darkness * 20, 1)
+  },
+
   drawTriangleSvg(path) {
     return `M${path.x1},${path.y1}L${path.x2},${path.y2}L${path.x3},${path.y3}Z`;
-    // return `M{path.x1},{path.y1}L{path.x2},{path.y2}L{path.x3},{path.y3}Z`;
   },
 
   render() {
+
     var pathNodes = this.state.paths.map( (path) => {
       return (
-        <path d={this.drawTriangleSvg(path)} fill={path.color} stroke={path.color}></path>
+        <path d={this.drawTriangleSvg(path)} fill={this.getColor(path)} stroke={path.color}></path>
       );
     });
+
     return(
       <svg width={this.props.config.width} height={this.props.config.height}>
         {pathNodes}

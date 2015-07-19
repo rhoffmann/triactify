@@ -14,7 +14,6 @@ var browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
     merge = require('merge-stream'),
-    karma = require('karma'),
     del = require('del');
 
 // Check for --production flag
@@ -85,12 +84,12 @@ gulp.task('lint', function () {
   return lintAllTheThings();
 });
 
-gulp.task('test', function(done) {
-  karma.runner.run({port: 9876}, function(exitCode) {
-    if (exitCode) return done('Karma tests failed');
-    return done();
-  });
-});
+// gulp.task('test', function(done) {
+//   karma.runner.run({port: 9876}, function(exitCode) {
+//     if (exitCode) return done('Karma tests failed');
+//     return done();
+//   });
+// });
 
 gulp.task('html', function () {
   return gulp.src(paths.html)
