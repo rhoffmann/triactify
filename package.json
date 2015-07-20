@@ -1,10 +1,11 @@
 {
   "name": "triactify",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "src/js/app.js",
   "scripts": {
-    "start": "node node_modules/.bin/webpack-dev-server --content-base src"
+    "watch": "node node_modules/.bin/webpack-dev-server --content-base .",
+    "dist": "node node_modules/.bin/webpack -p"
   },
   "author": "Richard Hoffmann <rhoffmann@fastmail.com>",
   "browserify": {
@@ -18,12 +19,16 @@
     "babel": "^5.6.14",
     "babel-core": "^5.6.20",
     "babel-loader": "^5.3.1",
+    "jasmine": "^2.3.1",
+    "jasmine-core": "^2.3.4",
     "json-loader": "^0.5.2",
+    "karma-chrome-launcher": "^0.2.0",
     "node-libs-browser": "^0.5.2",
     "webpack": "^1.10.1",
     "webpack-dev-server": "^1.10.1"
   },
   "dependencies": {
+    "axios": "^0.5.4",
     "chroma-js": "^1.0.1",
     "immutable": "^3.7.4",
     "react": "^0.13.3",

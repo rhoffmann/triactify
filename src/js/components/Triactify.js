@@ -57,14 +57,13 @@ export default React.createClass({
 
   getDefaultProps() {
     return {
-      fps: 10,
+      fps: 30,
       delta: 0.1,
       brightness: 1,
       saturation: 1,
       destruction: 0,
       liveliness: 1,
-      config: {
-      }
+      config: {}
     }
   },
 

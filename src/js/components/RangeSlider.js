@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default React.createClass({
+  displayName: 'RangeSlider',
   propTypes: {
     onUpdate: React.PropTypes.func.isRequired,
     value: React.PropTypes.string,
