@@ -29,6 +29,7 @@ export default React.createClass({
       animateX: false,
       animateY: true,
       liveliness: 1,
+      fps: 10,
       pattern: {
         polys: []
       }
@@ -50,7 +51,10 @@ export default React.createClass({
       cancelAnimationFrame(_this.animationID);
     }
 
-    this.replaceState(this.getInitialState());
+    this.setState({
+      paths: getPaths(this.props.pattern)
+    });
+
     this.forceUpdate();
 
     setTimeout(function(){
@@ -65,10 +69,12 @@ export default React.createClass({
     var _update = this.update;
 
     function draw() {
-      _this.animationID = requestAnimationFrame(draw);
-      _this.setState({
-        theta: _this.state.theta + _this.props.delta
-      });
+      setTimeout(function(){
+        _this.animationID = requestAnimationFrame(draw);
+        _this.setState({
+          theta: _this.state.theta + _this.props.delta
+        });
+      }, 1000 / _this.props.fps);
     }
 
     draw();
@@ -88,22 +94,22 @@ export default React.createClass({
   componentDidMount() {
     this.loop();
   },
-
-  getBrightness(theta) {
-    return this.props.brightness;
-  },
-
-  getSaturation(theta) {
-    return this.props.saturation;
-  },
-
-  getShapeColor(color) {
-    return updateColor(color, this.getBrightness(), this.getSaturation());
-  },
-
-  getStrokeColor(color) {
-    return updateColor(color, this.getBrightness(), this.getSaturation());
-  },
+  //
+  // getBrightness(theta) {
+  //   return this.props.brightness;
+  // },
+  //
+  // getSaturation(theta) {
+  //   return this.props.saturation;
+  // },
+  //
+  // getShapeColor(color) {
+  //   return updateColor(color, this.getBrightness(), this.getSaturation());
+  // },
+  //
+  // getStrokeColor(color) {
+  //   return updateColor(color, this.getBrightness(), this.getSaturation());
+  // },
 
   drawTriangleSvg(path) {
     return `M${path.x1},${path.y1}L${path.x2},${path.y2}L${path.x3},${path.y3}Z`;
