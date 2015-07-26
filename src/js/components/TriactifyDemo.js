@@ -7,6 +7,7 @@ import chroma from 'chroma-js';
 
 import Triactify from './Triactify';
 import RangeSlider from './RangeSlider';
+import Checkbox from './Checkbox';
 
 var sourcePalette = ['#092F3D', '#0F4F68', '#010F14', '#04222B', '#0E5970'];
 var targetPalette = ['#ffffff', '#333333', '#666666', '#999999', '#AAAAAA'];
@@ -62,14 +63,14 @@ export default React.createClass({
       liveliness: 1,
       animateX: true,
       animateY: true,
-      fps: 10,
+      fps: 30,
       destruction: 0,
       delta: 0.3
     }
   },
 
   updateState(value, param) {
-    this.state[param] = parseFloat(value);
+    this.state[param] = value;
     this.forceUpdate();
   },
 
@@ -124,7 +125,7 @@ export default React.createClass({
 
     var animatePalette = [];
     for(var i = 1; i < 10; i++) {
-      animatePalette.push(delayedUpdate(scaledPalettes[i], 'x_colors', 30));
+      animatePalette.push(delayedUpdate(scaledPalettes[i], 'x_colors', 10));
     }
 
     async.series(
@@ -161,7 +162,16 @@ export default React.createClass({
             delta={this.state.delta} />
         </div>
 
-        <div className="rangeSliders left">
+        <div className="controls left sep">
+
+          <div className="checkboxes cf">
+            <div className="left">
+              <Checkbox onUpdate={this.updateState} checked={this.state.animateX} param="animateX" /> <br/>
+            </div>
+            <div className="left sep">
+              <Checkbox onUpdate={this.updateState} checked={this.state.animateY} param="animateY" /> <br/>
+            </div>
+          </div>
 
           <RangeSlider value={this.state.config.get('cell_size')} min="10" max="200" step="10" title="Cell Size" param="cell_size" onUpdate={this.updateConfig}/><br />
 

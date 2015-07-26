@@ -94,22 +94,6 @@ export default React.createClass({
   componentDidMount() {
     this.loop();
   },
-  //
-  // getBrightness(theta) {
-  //   return this.props.brightness;
-  // },
-  //
-  // getSaturation(theta) {
-  //   return this.props.saturation;
-  // },
-  //
-  // getShapeColor(color) {
-  //   return updateColor(color, this.getBrightness(), this.getSaturation());
-  // },
-  //
-  // getStrokeColor(color) {
-  //   return updateColor(color, this.getBrightness(), this.getSaturation());
-  // },
 
   drawTriangleSvg(path) {
     return `M${path.x1},${path.y1}L${path.x2},${path.y2}L${path.x3},${path.y3}Z`;
@@ -123,8 +107,10 @@ export default React.createClass({
     var liveliness = this.props.liveliness;
     var destruction = this.props.destruction;
 
+    // TODO: better scaling!!!
+
     function scaleDestFactor(scaleFactor, destFactor) {
-      return scaleFactor + (scaleFactor * liveliness) + (destFactor * destruction);
+      return scaleFactor + (destFactor * destruction);
     }
 
     for(var i = 0; i < paths.length; i++) {
@@ -137,9 +123,9 @@ export default React.createClass({
       }
 
       if (animateX) {
-        path.x1 = path.x1 + Math.cos(theta + scale(path.x1, 0, scaleDestFactor(500, 0), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 0);
-        path.x2 = path.x2 + Math.cos(theta + scale(path.x2, 0, scaleDestFactor(500, 1), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 1);
-      	path.x3 = path.x3 + Math.cos(theta + scale(path.x3, 0, scaleDestFactor(500, 2), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 2);
+        path.x1 = path.x1 + Math.cos(theta + scale(path.y1, 0, scaleDestFactor(500, 0), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 0);
+        path.x2 = path.x2 + Math.cos(theta + scale(path.y2, 0, scaleDestFactor(500, 1), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 1);
+      	path.x3 = path.x3 + Math.cos(theta + scale(path.y3, 0, scaleDestFactor(500, 2), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 2);
       }
     }
 
