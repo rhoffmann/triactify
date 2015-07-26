@@ -11,23 +11,27 @@ export default React.createClass({
     param: React.PropTypes.string,
     title: React.PropTypes.string
   },
+
   getInitialState() {
     return {
       value: 0
     };
   },
+
   componentWillMount() {
     this.setState({value: this.props.value});
   },
+
   handleChange() {
     var val = this.refs.input.getDOMNode().value;
 
-    this.props.onUpdate(val, this.props.param || null);
-
+    this.props.onUpdate(parseFloat(val), this.props.param || null);
+    
     this.setState({
       value: val
     });
   },
+
   render() {
     return (
       <div className="range-slider">

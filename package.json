@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/js/app.js",
   "scripts": {
-    "watch": "node node_modules/.bin/webpack-dev-server --content-base .",
+    "serve": "node node_modules/.bin/webpack-dev-server --content-base .",
     "dist": "node node_modules/.bin/webpack -p"
   },
   "author": "Richard Hoffmann <rhoffmann@fastmail.com>",
@@ -22,12 +22,20 @@
     "jasmine": "^2.3.1",
     "jasmine-core": "^2.3.4",
     "json-loader": "^0.5.2",
+    "karma": "^0.12.36",
     "karma-chrome-launcher": "^0.2.0",
+    "karma-html-reporter": "^0.2.6",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-webpack": "^1.6.0",
+    "karma-sourcemap-loader": "^0.3.5",
+    "phantomjs": "^1.9.17",
     "node-libs-browser": "^0.5.2",
     "webpack": "^1.10.1",
     "webpack-dev-server": "^1.10.1"
   },
   "dependencies": {
+    "async": "^1.4.0",
     "axios": "^0.5.4",
     "chroma-js": "^1.0.1",
     "immutable": "^3.7.4",

@@ -1,5 +1,5 @@
 import React from 'react/addons';
-import RangeSlider from '../Main';
+import Main from '../Main';
 
 var TestUtils = React.addons.TestUtils;
 

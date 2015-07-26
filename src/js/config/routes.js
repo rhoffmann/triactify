@@ -6,7 +6,7 @@ import TriactifyDemo from '../components/TriactifyDemo';
 
 export default (
   <Route name="app" path="/" handler={Main}>
-    <Route name="palette" path="/p/:palette" handler={TriactifyDemo} />
+    <Route name="setup" path="/:setup" handler={TriactifyDemo} />
     <DefaultRoute handler={TriactifyDemo} />
   </Route>
 );

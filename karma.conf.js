@@ -1,10 +1,12 @@
-var webpackConfig = require('./webpack.config.js');
+var webpack = require('webpack');
+
+// var webpackConfig = require('./webpack.config.js');
 
 module.exports = function(config) {
   config.set({
     browsers: process.env.CONTINUOUS_INTEGRATION ? ['Firefox'] : ['PhantomJS', 'Chrome'],
     frameworks: ['jasmine'],
-    basePath: 'src',
+    basePath: '.',
     autoWatch: false,
     files: ['tests.webpack.js'],
     preprocessors: {
