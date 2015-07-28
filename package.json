@@ -39,6 +39,7 @@
     "axios": "^0.5.4",
     "chroma-js": "^1.0.1",
     "immutable": "^3.7.4",
+    "lodash": "^3.10.0",
     "react": "^0.13.3",
     "react-router": "^0.13.3",
     "trianglify": "^0.3.0"

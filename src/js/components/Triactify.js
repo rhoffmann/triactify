@@ -23,8 +23,8 @@ export default React.createClass({
   getDefaultProps() {
     return {
       delta: 0.1,
-      brightness: 1,
-      saturation: 1,
+      brightness: 0,
+      // saturation: 1,
       destruction: 0,
       animateX: false,
       animateY: true,
@@ -95,6 +95,11 @@ export default React.createClass({
     this.loop();
   },
 
+  updateColor(color) {
+    // return color;
+    return chroma(color).darken(this.props.brightness);
+  },
+
   drawTriangleSvg(path) {
     return `M${path.x1},${path.y1}L${path.x2},${path.y2}L${path.x3},${path.y3}Z`;
   },
@@ -110,7 +115,8 @@ export default React.createClass({
     // TODO: better scaling!!!
 
     function scaleDestFactor(scaleFactor, destFactor) {
-      return scaleFactor + (destFactor * destruction);
+      var scale = scaleFactor + (destFactor * destruction) + liveliness;
+      return scale;
     }
 
     for(var i = 0; i < paths.length; i++) {
@@ -133,14 +139,14 @@ export default React.createClass({
   },
 
   render() {
-
     var updatePaths = this.updatePaths(this.state.paths);
-
     var pathNodes = updatePaths.map( (path, index) => {
+      var color = this.updateColor(path.color);
       return (
-        <path d={this.drawTriangleSvg(path)} key={index} fill={path.color} stroke={path.color}></path>
+        <path d={this.drawTriangleSvg(path)} key={index} fill={color} stroke={color}></path>
       );
     });
+
     return(
       <svg width={this.props.width} height={this.props.height}>
         {pathNodes}
@@ -154,10 +160,10 @@ export default React.createClass({
 function scale(valueIn, baseMin, baseMax, limitMin, limitMax) {
   return ((limitMax - limitMin) * (valueIn - baseMin) / (baseMax - baseMin)) + limitMin;
 }
-
-function updateColor(color, brightness, saturation) {
-  return chroma(color).brighten(brightness).saturate(saturation);
-}
+//
+// function updateColor(color, brightness, saturation) {
+//   return chroma(color).brighten(brightness).saturate(saturation);
+// }
 
 function getPaths(pattern) {
   var paths = [];
