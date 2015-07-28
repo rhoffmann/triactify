@@ -12,8 +12,8 @@ import Checkbox from './Checkbox';
 
 // TODO: aufräumen, refactoring!!!
 
-var sourcePalette = _.shuffle(['#000', '#04222B', '#092F3D', '#0F4F68', '#08445C', '#0E5970', '#fff']);
-var targetPalette = _.shuffle(['#000', '#74C2EF', '#51A9DB', '#2F96BC', '#237Ea7', '#0C6F91', '#fff']);
+var sourcePalette = _.shuffle(['#010F14', '#04222B', '#092F3D', '#0F4F68', '#08445C', '#0E5970']);
+var targetPalette = _.shuffle(['#B2D8FF', '#74C2EF', '#51A9DB', '#2F96BC', '#237Ea7', '#0C6F91']);
 
 // positiv
 // neutral

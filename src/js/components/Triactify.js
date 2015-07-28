@@ -96,8 +96,8 @@ export default React.createClass({
   },
 
   updateColor(color) {
-    // return color;
-    return chroma(color).darken(this.props.brightness);
+    return color;
+    // return chroma(color).darken(this.props.brightness);
   },
 
   drawTriangleSvg(path) {
