@@ -69,7 +69,7 @@ export default React.createClass({
       animateX: true,
       animateY: true,
       randomPalette: false,
-      fps: 30,
+      fps: 15,
       destruction: 0,
       delta: 0.3
     }
@@ -99,7 +99,7 @@ export default React.createClass({
       this.updateConfig(palette, 'x_colors');
     }
 
-    this.forceUpdate();
+    // this.forceUpdate();
   },
 
   toggleRandomPalette() {
@@ -111,6 +111,8 @@ export default React.createClass({
   updateConfig(value, param) {
 
     console.log('updateConfig: ', value, param);
+    // console.log(this.state.delta);
+
     var newConfig = this.state.config.set(param, value);
 
     if (newConfig !== this.state.config) {
@@ -237,7 +239,7 @@ export default React.createClass({
 
           <RangeSlider value={this.state.paletteIndex} min="0" max="9" step="1" title="Helligkeit" onUpdate={this.updatePalette}/><br />
 
-          <RangeSlider value={this.state.delta} min="0.1" max="1" step=".1" title="Bewegung 1" param="delta" onUpdate={this.updateState}/><br />
+          <RangeSlider value={this.state.delta} min="0.05" max="0.5" step=".05" title="Bewegung 1" param="delta" onUpdate={this.updateState}/><br />
 
           <RangeSlider value={this.state.liveliness} min="0" max="10" step="1" title="Bewegung 2" param="liveliness" onUpdate={this.updateState}/><br />
 

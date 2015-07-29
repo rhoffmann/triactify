@@ -29,7 +29,7 @@ export default React.createClass({
       animateX: false,
       animateY: true,
       liveliness: 1,
-      fps: 10,
+      fps: 30,
       pattern: {
         polys: []
       }
@@ -48,7 +48,8 @@ export default React.createClass({
 
     // clear any running animation timeouts if we are (re)initializing
     if (_this.animationID) {
-      cancelAnimationFrame(_this.animationID);
+      clearTimeout(_this.animationID);
+      // cancelAnimationFrame(_this.animationID);
     }
 
     this.setState({
@@ -69,11 +70,12 @@ export default React.createClass({
     var _update = this.update;
 
     function draw() {
-      setTimeout(function(){
-        _this.animationID = requestAnimationFrame(draw);
+      _this.animationID = setTimeout(function(){
+        requestAnimationFrame(draw);
         _this.setState({
           theta: _this.state.theta + _this.props.delta
         });
+        // console.log(_this.props.delta, _this.props.fps);
       }, 1000 / _this.props.fps);
     }
 
@@ -123,9 +125,9 @@ export default React.createClass({
       var path = paths[i];
 
       if (animateY) {
-        path.y1 = path.y1 + Math.sin(theta + scale(path.x1, 0, scaleDestFactor(500, 0), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 0);
-        path.y2 = path.y2 + Math.sin(theta + scale(path.x2, 0, scaleDestFactor(500, 1), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 1);
-    		path.y3 = path.y3 + Math.sin(theta + scale(path.x3, 0, scaleDestFactor(500, 2), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 2);
+        path.y1 = path.y1 + Math.sin(theta + scale(path.y1, 0, scaleDestFactor(500, 0), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 0);
+        path.y2 = path.y2 + Math.sin(theta + scale(path.y2, 0, scaleDestFactor(500, 1), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 1);
+    		path.y3 = path.y3 + Math.sin(theta + scale(path.y3, 0, scaleDestFactor(500, 2), 0, 2 * Math.PI)) * scaleDestFactor(0.5, 2);
       }
 
       if (animateX) {
